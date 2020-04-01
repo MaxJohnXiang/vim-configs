@@ -1,0 +1,28 @@
+{
+    "tsserver.enable": true,
+    "typescript.suggest.enabled": true,
+    "javascript.preferences.quoteStyle": "single",
+    "html.enable": true,
+    "html.filetypes": ["html", "php", "handlebars", "razor"],
+    "html.format.enable": true,
+    "html.suggest.html5": true,
+    "python.linting.enabled": true,
+    "tsserver.log": "verbose",
+    "python.jediEnabled": true,
+    "python.autoUpdateLanguageServer": true,
+    "go.goplsOptions":{
+            "completeUnimported": true
+
+    },
+    "languageserver": {
+        "intelephense": {
+            "command": "intelephense",
+            "args": ["--stdio"],
+            "filetypes": ["php"],
+            "initializationOptions": {
+                "storagePath": "/tmp/intelephense"
+            }
+        }
+    }
+}
+
