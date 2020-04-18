@@ -1,36 +1,23 @@
 - repo: honza/vim-snippets
 
 
-# - { repo: benekastah/neomake, if: 0 }
-#
-# - repo: iamcco/markdown-preview.nvim
-#   on_ft: [ markdown, pandoc.markdown, rmd ]
-#   build: 'cd app & npm install'
-
-
-
-# - repo: sbdchd/neoformat
-
-
-# - repo: rking/ag.vim
-
-
 - repo: neoclide/coc.nvim
   merge: 0
   rev: release
   hook_source: source $VIM_PATH/config/plugins/coc.vim
 
+- repo: ybian/smartim
+  hook_add: let g:smartim_default = 'com.apple.keylayout.ABC'
 
-# - { repo: Shougo/deoplete.nvim	, if: 0 }
-#
-# - { repo: Shougo/deoplete-lsp	, if: 0 }
-#
-# - { repo: deoplete-plugins/deoplete-go, if: 0 }
-#
-# - { repo: deoplete-plugins/deoplete-jedi, if: 0 }
-#
-# - { repo: deoplete-plugins/deoplete-tag, if: 0 }
-#
+- repo: terryma/vim-multiple-cursors
+
+
+- repo: tpope/vim-surround
+
+- repo: junegunn/vim-easy-align
+
+
+#disable plugins
 - { repo: neovim/nvim-lsp	, if: 0 }
 
 # - { repo: prabirshrestha/asyncomplete.vim	, if: 0 }
@@ -46,3 +33,6 @@
 - { repo: wellle/tmux-complete.vim	, if: 0 }
 
 - { repo: prabirshrestha/asyncomplete-ultisnips.vim	, if: 0 }
+
+
+
