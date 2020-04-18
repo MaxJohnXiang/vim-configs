@@ -33,6 +33,3 @@
 - { repo: wellle/tmux-complete.vim	, if: 0 }
 
 - { repo: prabirshrestha/asyncomplete-ultisnips.vim	, if: 0 }
-
-
-
