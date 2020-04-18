@@ -19,7 +19,7 @@ let g:ale_fix_on_save = 1
 
 
 
-nnoremap <leader>ev :vs /Users/xiangyun/.config/nvim/config/local.vim<cr>
+nnoremap <leader>ev :vs ~/.config/nvim/config/local.vim<cr>
 
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
