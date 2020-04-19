@@ -1,5 +1,6 @@
 - repo: honza/vim-snippets
 
+- repo: tpope/vim-repeat
 
 - repo: neoclide/coc.nvim
   merge: 0
@@ -33,3 +34,15 @@
 - { repo: wellle/tmux-complete.vim	, if: 0 }
 
 - { repo: prabirshrestha/asyncomplete-ultisnips.vim	, if: 0 }
+
+- { repo: python-mode/python-mode, on_ft: python}
+
+
+- repo: easymotion/vim-easymotion
+  on_map: { n: <Plug> }
+  hook_source: |
+    let g:EasyMotion_do_mapping = 0
+    let g:EasyMotion_prompt = 'Jump to → '
+    let g:EasyMotion_keys = 'fjdksweoavn'
+    let g:EasyMotion_smartcase = 1
+    let g:EasyMotion_use_smartsign_us = 1
