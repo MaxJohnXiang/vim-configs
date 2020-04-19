@@ -39,20 +39,20 @@ Best with [Neovim] or [Vim8] and `python3` enabled.
     * [Denite](#denite)
     * [Operators & Text Objects](#operators--text-objects)
 * [Custom Key-mappings](#custom-key-mappings)
-  * [General](#general)
+  * [Navigation](#navigation)
   * [File Operations](#file-operations)
+  * [Edit](#edit)
+  * [Search & Replace](#search--replace)
+  * [Clipboard](#clipboard)
+  * [Command & History](#command--history)
   * [Editor UI](#editor-ui)
+  * [Custom Tools & Plugins](#custom-tools--plugins)
   * [Window Management](#window-management)
+  * [Git Version Control](#git-version-control)
   * [Plugin: Denite](#plugin-denite)
   * [Plugin: Defx](#plugin-defx)
   * [Plugin: Asyncomplete and Emmet](#plugin-asyncomplete-and-emmet)
-  * [Plugin: Caw (comments)](#plugin-caw-comments)
-  * [Plugin: Edge Motion](#plugin-edge-motion)
   * [Plugin: Signature](#plugin-signature)
-  * [Plugin: Easygit](#plugin-easygit)
-  * [Plugin: GitGutter](#plugin-gitgutter)
-  * [Plugin: Linediff](#plugin-linediff)
-  * [Misc Plugins](#misc-plugins)
 * [Credits & Contribution](#credits--contribution)
 
 <!-- vim-markdown-toc -->
@@ -570,9 +570,10 @@ _Note_ that 95% of the plugins are **[lazy-loaded]**.
 
 Note that,
 
-* Leader key set as <kbd>Space</kbd>
-* Local-leader set as <kbd>;</kbd> and used for navigation and search
+* **Leader** key set as <kbd>Space</kbd>
+* **Local-Leader** key set as <kbd>;</kbd> and used for navigation and search
   (Denite and Defx)
+* Disable <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> in normal mode by enabling `g:elite_mode` in `.vault.vim`
 
 <details open>
   <summary>
@@ -580,290 +581,312 @@ Note that,
     <small><i>(🔎 Click to expand/collapse)</i></small>
   </summary>
 
-### General
+<center>Modes: 𝐍=normal 𝐕=visual 𝐒=select 𝐈=insert 𝐂=command</center>
 
-| Key   | Mode | Action
-| ----- |:----:| ------------------
-| <kbd>Space</kbd> | _All_ | **Leader** key
-| <kbd>;</kbd> | _All_ | **Local Leader** key
-| <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> | Normal | Resize splits (* Enable `g:elite_mode` in `.vault.vim`)
-| <kbd>;</kbd>+<kbd>c</kbd> | Normal | Open context-menu
-| <kbd>Space</kbd>+<kbd>l</kbd> | Normal | Open side-menu helper
-| <kbd>Backspace</kbd> | Normal | Match bracket (`%`)
-| <kbd>gK</kbd> | Normal | Open Zeal or Dash on some file-types
-| <kbd>Y</kbd> | Normal | Yank to the end of line (`y$`)
-| <kbd>Return</kbd> | Normal | Toggle fold (`za`)
-| <kbd>Shift</kbd>+<kbd>Return</kbd> | Normal | Focus the current fold by closing all others (`zMzvzt`)
-| <kbd>Shift</kbd>+<kbd>Return</kbd> | Insert | Start new line from any cursor position (`<C-o>o`)
-| <kbd>j</kbd> / <kbd>k</kbd> | Normal/Visual | Cursor moves through display-lines (`g/jk`)
-| <kbd>Ctrl</kbd>+<kbd>f</kbd> | Normal | Smart page forward (`C-f/C-d`)
-| <kbd>Ctrl</kbd>+<kbd>b</kbd> | Normal | Smart page backwards (`C-b/C-u`)
-| <kbd>Ctrl</kbd>+<kbd>e</kbd> | Normal | Smart scroll down (`3C-e/j`)
-| <kbd>Ctrl</kbd>+<kbd>y</kbd> | Normal | Smart scroll up (`3C-y/k`)
-| <kbd>Ctrl</kbd>+<kbd>q</kbd> | Normal | Remap to <kbd>Ctrl</kbd>+<kbd>w</kbd>
-| <kbd>Ctrl</kbd>+<kbd>x</kbd> | Normal | Rotate window placement
-| <kbd>!</kbd> | Normal | Shortcut for `:!`
-| <kbd><<</kbd> | Visual | Indent to left and re-select
-| <kbd>>></kbd> | Visual | Indent to right and re-select
-| <kbd>Tab</kbd> | Visual | Indent to right and re-select
-| <kbd>Shift</kbd>+<kbd>Tab</kbd> | Visual | Indent to left and re-select
-| <kbd>gh</kbd> | Normal | Show highlight groups for word
-| <kbd>gp</kbd> | Normal | Select last paste
-| <kbd>Q</kbd> | Normal | Start/stop macro recording
-| <kbd>gQ</kbd> | Normal | Play macro 'q'
-| <kbd>Space</kbd>+<kbd>j</kbd> or <kbd>k</kbd> | Normal/Visual | Move lines down/up
-| <kbd>Space</kbd>+<kbd>cp</kbd> | Normal | Duplicate paragraph
-| <kbd>Space</kbd>+<kbd>cn</kbd> / <kbd>cN</kbd> | Normal/Visual | Change current word in a repeatable manner
-| <kbd>s</kbd><kbd>g</kbd> | Visual | Replace within selected area
-| <kbd>Ctrl</kbd>+<kbd>a</kbd> | Command | Navigation in command line
-| <kbd>Ctrl</kbd>+<kbd>b</kbd> | Command | Move cursor backward in command line
-| <kbd>Ctrl</kbd>+<kbd>f</kbd> | Command | Move cursor forward in command line
-| <kbd>Ctrl</kbd>+<kbd>r</kbd> | Visual | Replace selection with step-by-step confirmation
-| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>q</kbd> | Normal | Exit Vim, confirm unsaved changes
-| <kbd>Space</kbd>+<kbd>cw</kbd> | Normal | Remove all spaces at EOL
-| <kbd>Space</kbd>+<kbd>Space</kbd> | Normal | Enter visual line-mode
-| <kbd>Space</kbd>+<kbd>sl</kbd> | Normal | Load workspace session
-| <kbd>Space</kbd>+<kbd>se</kbd> | Normal | Save current workspace session
-| <kbd>Space</kbd>+<kbd>d</kbd> | Normal/Visual | Duplicate line or selection
-| <kbd>Space</kbd>+<kbd>S</kbd> | Normal/Visual | Source selection
-| <kbd>Space</kbd>+<kbd>ml</kbd> | Normal | Append modeline
+### Navigation
+
+| Key   | Mode | Action             | Plugin or Mapping
+| ----- |:----:| ------------------ | ------
+| <kbd>j</kbd> / <kbd>k</kbd> | 𝐍 𝐕 | Cursor moves through display-lines | `g` `j/k`
+| <kbd>g</kbd>+<kbd>j</kbd> / <kbd>k</kbd> | 𝐍 𝐕 𝐒 | Jump to edge upward/downward | <small>[haya14busa/vim-edgemotion]</small>
+| <kbd>gh</kbd> / <kbd>gl</kbd> | 𝐍 𝐕 | Easier line-wise movement | `g` `^/$`
+| <kbd>Space</kbd>+<kbd>Space</kbd> | 𝐍 𝐕 | Toggle visual-line mode | `V` / <kbd>Escape</kbd>
+| <kbd>v</kbd> / <kbd>V</kbd> | 𝐕 | Expand/reduce selection | <small>[terryma/vim-expand-region]</small>
+| <kbd>zl</kbd> / <kbd>zh</kbd> | 𝐍 | Scroll horizontally and vertically wider | `z4` `l/h`
+| <kbd>Ctrl</kbd>+<kbd>j</kbd> | 𝐍 | Move to split below | <small>[christoomey/tmux-navigator]</small>
+| <kbd>Ctrl</kbd>+<kbd>k</kbd> | 𝐍 | Move to upper split | <small>[christoomey/tmux-navigator]</small>
+| <kbd>Ctrl</kbd>+<kbd>h</kbd> | 𝐍 | Move to left split | <small>[christoomey/tmux-navigator]</small>
+| <kbd>Ctrl</kbd>+<kbd>l</kbd> | 𝐍 | Move to right split | <small>[christoomey/tmux-navigator]</small>
+| <kbd>Return</kbd> | 𝐍 | Toggle fold | `za`
+| <kbd>Shift</kbd>+<kbd>Return</kbd> | 𝐍 | Focus the current fold by closing all others | `zMzvzt`
+| <kbd>]q</kbd> or <kbd>]q</kbd> | 𝐍 | Next/previous on quickfix list | `:cnext` / `:cprev`
+| <kbd>]l</kbd> or <kbd>]l</kbd> | 𝐍 | Next/previous on location-list | `:lnext` / `:lprev`
+| <kbd>]w</kbd> or <kbd>]w</kbd> | 𝐍 | Next/previous whitespace error | <small>[plugin/whitespace.vim]</small>
+| <kbd>]g</kbd> or <kbd>]g</kbd> | 𝐍 | Next/previous Git hunk | <small>[airblade/vim-gitgutter]</small>
+| <kbd>]c</kbd> or <kbd>]c</kbd> | 𝐍 | Next/previous Ale diagnostic | <small>[dense-analysis/ale]</small>
+| <kbd>Ctrl</kbd>+<kbd>f</kbd> | 𝐂 | Move cursor forwards in command | <kbd>Right</kbd>
+| <kbd>Ctrl</kbd>+<kbd>b</kbd> | 𝐂 | Move cursor backwards in command | <kbd>Left</kbd>
+| <kbd>Ctrl</kbd>+<kbd>h</kbd> | 𝐂 | Move cursor to the beginning in command | <kbd>Home</kbd>
+| <kbd>Ctrl</kbd>+<kbd>l</kbd> | 𝐂 | Move cursor to the end in command | <kbd>End</kbd>
 
 ### File Operations
 
-| Key   | Mode | Action
-| ----- |:----:| ------------------
-| <kbd>Space</kbd>+<kbd>cd</kbd> | Normal | Switch to the directory of opened buffer (`:lcd %:p:h`)
-| <kbd>Space</kbd>+<kbd>w</kbd> | Normal/Visual | Write (`:w`)
-| <kbd>Space</kbd>+<kbd>y</kbd> | Normal | Copy relative file-path to clipboard
-| <kbd>Space</kbd>+<kbd>Y</kbd> | Normal | Copy absolute file-path to clipboard
-| <kbd>Ctrl</kbd>+<kbd>s</kbd> | _All_ | Write (`:w`)
+| Key   | Mode | Action             | Plugin or Mapping
+| ----- |:----:| ------------------ | ------
+| <kbd>Space</kbd>+<kbd>cd</kbd> | 𝐍 | Switch to the directory of opened buffer | `:lcd %:p:h`
+| <kbd>gf</kbd> | 𝐍 𝐕 | Open file under the cursor in a vsplit | `:rightbelow wincmd f`
+| <kbd>Space</kbd>+<kbd>w</kbd> | 𝐍 𝐕 𝐒 | Write buffer to file | `:write`
+| <kbd>Ctrl</kbd>+<kbd>s</kbd> | 𝐍 𝐕 𝐒 𝐂 | Write buffer to file | `:write`
+
+### Edit
+
+| Key   | Mode | Action             | Plugin or Mapping
+| ----- |:----:| ------------------ | ------
+| <kbd>Ctrl</kbd>+<kbd>Return</kbd> | 𝐈 | Expand emmet abbreviation | <small>[mattn/emmet-vim]</small>
+| <kbd>Q</kbd> | 𝐍 | Start/stop macro recording | `q`
+| <kbd>gQ</kbd> | 𝐍 | Play macro 'q' | `@q`
+| <kbd>Shift</kbd>+<kbd>Return</kbd> | 𝐈 | Start new line from any cursor position | `<C-o>o`
+| <kbd><</kbd> | 𝐕 𝐒 | Indent to left and re-select | `<gv`
+| <kbd>></kbd> | 𝐕 𝐒 | Indent to right and re-select | `>gv|`
+| <kbd>Tab</kbd> | 𝐕 𝐒 | Indent to right and re-select | `>gv|`
+| <kbd>Shift</kbd>+<kbd>Tab</kbd> | 𝐕 𝐒 | Indent to left and re-select | `<gv`
+| <kbd>gc</kbd> | 𝐍 𝐕 𝐒 | Caw (comments plugin) prefix | <small>[tyru/caw.vim]</small>
+| <kbd>gcc</kbd> | 𝐍 𝐕 𝐒 | Toggle comments | <small>[tyru/caw.vim]</small>
+| <kbd>Space</kbd>+<kbd>v</kbd> | 𝐍 𝐕 𝐒 | Toggle single-line comments | <small>[tyru/caw.vim]</small>
+| <kbd>Space</kbd>+<kbd>V</kbd> | 𝐍 𝐕 𝐒 | Toggle comment block | <small>[tyru/caw.vim]</small>
+| <kbd>Space</kbd>+<kbd>j</kbd> or <kbd>k</kbd> | 𝐍 𝐕 | Move lines down/up | `:m` …
+| <kbd>Space</kbd>+<kbd>d</kbd> | 𝐍 𝐕 | Duplicate line or selection |
+| <kbd>Space</kbd>+<kbd>cn</kbd> / <kbd>cN</kbd> | 𝐍 𝐕 | Change current word in a repeatable manner |
+| <kbd>Space</kbd>+<kbd>cp</kbd> | 𝐍 | Duplicate paragraph | `yap<S-}>p`
+| <kbd>Space</kbd>+<kbd>cw</kbd> | 𝐍 | Remove all spaces at EOL | `:%s/\s\+$//e`
+| <kbd>Ctrl</kbd>+<kbd>Tab</kbd> | 𝐈 | Jump outside of pair | <small>[Raimondi/delimitMate]</small>
+| <kbd>sj</kbd> / <kbd>sk</kbd> | 𝐍 | Join/split arguments | <small>[AndrewRadev/splitjoin.vim]</small>
+| <kbd>dsf</kbd> / <kbd>csf</kbd> | 𝐍 | Delete/change surrounding function call | <small>[AndrewRadev/dsf.vim]</small>
+
+### Search & Replace
+
+| Key   | Mode | Action             | Plugin or Mapping
+| ----- |:----:| ------------------ | ------
+| <kbd>*</kbd> / <kbd>#</kbd> | 𝐍 𝐕 | Search selection forward/backward | <small>[haya14busa/vim-asterisk]</small>
+| <kbd>g*</kbd> / <kbd>g#</kbd> | 𝐍 𝐕 | Search whole-word forward/backward | <small>[haya14busa/vim-asterisk]</small>
+| <kbd>Backspace</kbd> | 𝐍 | Match bracket | `%`
+| <kbd>gp</kbd> | 𝐍 | Select last paste |
+| <kbd>sg</kbd> | 𝐕 | Replace within selected area | `:s/⌴/gc`
+| <kbd>Ctrl</kbd>+<kbd>r</kbd> | 𝐕 | Replace selection with step-by-step confirmation | `:%s/\V/⌴/gc`
+
+### Clipboard
+
+| Key   | Mode | Action             | Plugin or Mapping
+| ----- |:----:| ------------------ | ------
+| <kbd>p</kbd> | 𝐕 𝐒 | Paste without yank | <small>[kana/vim-operator-replace]</small>
+| <kbd>Y</kbd> | 𝐍 | Yank to the end of line | `y$`
+| <kbd>Space</kbd>+<kbd>y</kbd> | 𝐍 | Copy relative file-path to clipboard |
+| <kbd>Space</kbd>+<kbd>Y</kbd> | 𝐍 | Copy absolute file-path to clipboard |
+
+### Command & History
+
+| Key   | Mode | Action             | Plugin or Mapping
+| ----- |:----:| ------------------ | ------
+| <kbd>!</kbd> | 𝐍 | Shortcut for shell command | `:!`
+| <kbd>g!</kbd> | 𝐍 | Read vim command into buffer | `:put=execute('⌴')`
+| <kbd>Ctrl</kbd>+<kbd>n</kbd> / <kbd>p</kbd> | 𝐂 | Switch history search pairs | <kbd>↓</kbd> / <kbd>↑</kbd>
+| <kbd>↓</kbd> / <kbd>↑</kbd> | 𝐂 | Switch history search pairs | `Ctrl` `n`/`p`
 
 ### Editor UI
 
-| Key   | Mode | Action
-| ----- |:----:| ------------------
-| <kbd>Space</kbd>+<kbd>ti</kbd> | Normal | Toggle indentation lines
-| <kbd>Space</kbd>+<kbd>ts</kbd> | Normal | Toggle spell-checker (`:setlocal spell!`)
-| <kbd>Space</kbd>+<kbd>tn</kbd> | Normal | Toggle line numbers (`:setlocal nonumber!`)
-| <kbd>Space</kbd>+<kbd>tl</kbd> | Normal | Toggle hidden characters (`:setlocal nolist!`)
-| <kbd>Space</kbd>+<kbd>th</kbd> | Normal | Toggle highlighted search (`:set hlsearch!`)
-| <kbd>Space</kbd>+<kbd>tw</kbd> | Normal | Toggle wrap (`:setlocal wrap! breakindent!`)
-| <kbd>g1</kbd> | Normal | Go to first tab (`:tabfirst`)
-| <kbd>g9</kbd> | Normal | Go to last tab (`:tablast`)
-| <kbd>g5</kbd> | Normal | Go to previous tab (`:tabprevious`)
-| <kbd>Ctrl</kbd>+<kbd>j</kbd> | Normal | Move to split below
-| <kbd>Ctrl</kbd>+<kbd>k</kbd> | Normal | Move to upper split
-| <kbd>Ctrl</kbd>+<kbd>h</kbd> | Normal | Move to left split
-| <kbd>Ctrl</kbd>+<kbd>l</kbd> | Normal | Move to right split
-| <kbd>*</kbd> | Visual | Search selection forwards
-| <kbd>#</kbd> | Visual | Search selection backwards
-| <kbd>]</kbd>+<kbd>c</kbd> or <kbd>q</kbd> | Normal | Next on location/quickfix list
-| <kbd>]</kbd>+<kbd>c</kbd> or <kbd>q</kbd> | Normal | Previous on location/quickfix list
-| <kbd>s</kbd>+<kbd>h</kbd> | Normal | Toggle colorscheme background dark/light
-| <kbd>s</kbd>+<kbd>-</kbd> | Normal | Lower colorscheme contrast (Support solarized8)
-| <kbd>s</kbd>+<kbd>=</kbd> | Normal | Raise colorscheme contrast (Support solarized8)
+| Key   | Mode | Action             | Plugin or Mapping
+| ----- |:----:| ------------------ | ------
+| <kbd>Space</kbd>+<kbd>ts</kbd> | 𝐍 | Toggle spell-checker | <small>`:setlocal spell!`</small>
+| <kbd>Space</kbd>+<kbd>tn</kbd> | 𝐍 | Toggle line numbers | <small>`:setlocal nonumber!`</small>
+| <kbd>Space</kbd>+<kbd>tl</kbd> | 𝐍 | Toggle hidden characters | <small>`:setlocal nolist!`</small>
+| <kbd>Space</kbd>+<kbd>th</kbd> | 𝐍 | Toggle highlighted search | <small>`:set hlsearch!`</small>
+| <kbd>Space</kbd>+<kbd>tw</kbd> | 𝐍 | Toggle wrap | <small>`:setlocal wrap!`</small> …
+| <kbd>Space</kbd>+<kbd>ti</kbd> | 𝐍 | Toggle indentation lines | <small>[nathanaelkane/vim-indent-guides]</small>
+| <kbd>g1</kbd> | 𝐍 | Go to first tab | `:tabfirst`
+| <kbd>g9</kbd> | 𝐍 | Go to last tab | `:tablast`
+| <kbd>g5</kbd> | 𝐍 | Go to previous tab | `:tabprevious`
+| <kbd>Ctrl</kbd>+<kbd>Tab</kbd> | 𝐍 | Go to next tab | `:tabnext`
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd><kbd>Tab</kbd> | 𝐍 | Go to previous tab | `:tabprevious`
+| <kbd>Alt</kbd>+<kbd>j</kbd> | 𝐍 | Go to next tab | `:tabnext`
+| <kbd>Alt</kbd>+<kbd>k</kbd> | 𝐍 | Go to previous tab | `:tabprevious`
+| <kbd>Alt</kbd>+<kbd>{</kbd> | 𝐍 | Move tab backward | `:-tabmove`
+| <kbd>Alt</kbd>+<kbd>}</kbd> | 𝐍 | Move tab forward | `:+tabmove`
+| <kbd>Space</kbd>+<kbd>h</kbd> | 𝐍 | Show highlight groups for word |
+
+### Custom Tools & Plugins
+
+| Key   | Mode | Action             | Plugin or Mapping
+| ----- |:----:| ------------------ | ------
+| <kbd>-</kbd> | 𝐍 | Choose a window to edit | <small>[t9md/vim-choosewin]</small>
+| <kbd>;</kbd>+<kbd>c</kbd> | 𝐍 | Open context-menu | <small>[plugin/actionmenu.vim]</small>
+| <kbd>gK</kbd> | 𝐍 | Open Zeal or Dash on some file-types | <small>[plugin/devhelp.vim]</small>
+| <kbd>Space</kbd>+<kbd>l</kbd> | 𝐍 | Open side-menu helper | <small>[rafi/vim-sidemenu]</small>
+| <kbd>Space</kbd>+<kbd>b</kbd> | 𝐍 | Open structure window | <small>[liuchengxu/vista.vim]</small>
+| <kbd>Space</kbd>+<kbd>a</kbd> | 𝐍 | Show nearby tag in structure window | <small>[liuchengxu/vista.vim]</small>
+| <kbd>Space</kbd>+<kbd>se</kbd> | 𝐍 | Save current workspace session | <small>[plugin/sessions.vim]</small>
+| <kbd>Space</kbd>+<kbd>sl</kbd> | 𝐍 | Load workspace session | <small>[plugin/sessions.vim]</small>
+| <kbd>Space</kbd>+<kbd>o</kbd> | 𝐍 𝐕 | Open SCM detailed URL in browser | <small>[plugin/browser.vim]</small>
+| <kbd>Space</kbd>+<kbd>n</kbd>/<kbd>N</kbd> | 𝐍 | Open alternative file | <small>[kana/vim-altr]</small>
+| <kbd>Space</kbd>+<kbd>tc</kbd> | 𝐍 | Enable scroll-context window | <small>[wellle/context.vim]</small>
+| <kbd>Space</kbd>+<kbd>tp</kbd> | 𝐍 | Peek scroll-context window | <small>[wellle/context.vim]</small>
+| <kbd>Space</kbd>+<kbd>S</kbd> | 𝐍 𝐕 | Source selection | `y:execute @@`
+| <kbd>Space</kbd>+<kbd>?</kbd> | 𝐍 | Open the macOS dictionary on current word | `:!open dict://`
+| <kbd>Space</kbd>+<kbd>P</kbd> | 𝐍 | Use Marked 2 for real-time Markdown preview | <small>[Marked 2]</small>
+| <kbd>Space</kbd>+<kbd>ml</kbd> | 𝐍 | Append modeline to end of buffer | <small>[config/mappings.vim]</small>
+| <kbd>Space</kbd>+<kbd>mda</kbd> | 𝐕 | Sequentially mark region for diff | <small>[AndrewRadev/linediff.vim]</small>
+| <kbd>Space</kbd>+<kbd>mdf</kbd> | 𝐕 | Mark region for diff and compare if more than one | <small>[AndrewRadev/linediff.vim]</small>
+| <kbd>Space</kbd>+<kbd>mds</kbd> | 𝐍 | Shows the comparison for all marked regions | <small>[AndrewRadev/linediff.vim]</small>
+| <kbd>Space</kbd>+<kbd>mdr</kbd> | 𝐍 | Removes the signs denoting the diff regions | <small>[AndrewRadev/linediff.vim]</small>
+| <kbd>Space</kbd>+<kbd>mg</kbd> | 𝐍 | Open Magit | <small>[jreybert/vimagit]</small>
+| <kbd>Space</kbd>+<kbd>mt</kbd> | 𝐍 𝐕 | Toggle highlighted word | <small>[t9md/vim-quickhl]</small>
+| <kbd>Space</kbd>+<kbd>-</kbd> | 𝐍 | Switch editing window with selected | <small>[t9md/vim-choosewin]</small>
+| <kbd>Space</kbd>+<kbd>G</kbd> | 𝐍 | Toggle distraction-free writing | <small>[junegunn/goyo]</small>
+| <kbd>Space</kbd>+<kbd>gu</kbd> | 𝐍 | Open undo-tree | <small>[mbbill/undotree]</small>
+| <kbd>Space</kbd>+<kbd>K</kbd> | 𝐍 | Thesaurus | <small>[Ron89/thesaurus_query.vim]</small>
+| <kbd>Space</kbd>+<kbd>W</kbd> | 𝐍 | VimWiki | <small>[vimwiki/vimwiki]</small>
 
 ### Window Management
 
-| Key   | Mode | Action
-| ----- |:----:| ------------------
-| <kbd>q</kbd> | Normal | Quit window (and Vim, if last window)
-| <kbd>Ctrl</kbd>+<kbd>Tab</kbd> | Normal | Next tab
-| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Tab</kbd> | Normal | Previous tab
-| <kbd>s</kbd>+<kbd>v</kbd> | Normal | Horizontal split (`:split`)
-| <kbd>s</kbd>+<kbd>g</kbd> | Normal | Vertical split (`:vsplit`)
-| <kbd>s</kbd>+<kbd>t</kbd> | Normal | Open new tab (`:tabnew`)
-| <kbd>s</kbd>+<kbd>o</kbd> | Normal | Close other windows (`:only`)
-| <kbd>s</kbd>+<kbd>b</kbd> | Normal | Previous buffer (`:b#`)
-| <kbd>s</kbd>+<kbd>c</kbd> | Normal | Closes current buffer (`:close`)
-| <kbd>s</kbd>+<kbd>x</kbd> | Normal | Remove buffer, leave blank window
-| <kbd>Space</kbd>+<kbd>sv</kbd> | Normal | Split with previous buffer
-| <kbd>Space</kbd>+<kbd>sg</kbd> | Normal | Vertical split with previous buffer
+| Key   | Mode | Action             | Plugin or Mapping
+| ----- |:----:| ------------------ | ------
+| <kbd>q</kbd> | 𝐍 | Quit window (and Vim, if last window) | `:quit`
+| <kbd>Ctrl</kbd>+<kbd>q</kbd> | 𝐍 | Remap to C-w | <kbd>Ctrl</kbd>+<kbd>w</kbd>
+| <kbd>Ctrl</kbd>+<kbd>x</kbd> | 𝐍 | Rotate window placement | `C-w` `x`
+| <kbd>sv</kbd> | 𝐍 | Horizontal split | `:split`
+| <kbd>sg</kbd> | 𝐍 | Vertical split | `:vsplit`
+| <kbd>st</kbd> | 𝐍 | Open new tab | `:tabnew`
+| <kbd>so</kbd> | 𝐍 | Close other windows | `:only`
+| <kbd>sb</kbd> | 𝐍 | Previous buffer | `:b#`
+| <kbd>sc</kbd> | 𝐍 | Close current buffer | `:close`
+| <kbd>sx</kbd> | 𝐍 | Delete buffer, leave blank window | `:enew │ bdelete`
+| <kbd>ssv</kbd> | 𝐍 | Split with previous buffer | `:split │ wincmd p │ e#`
+| <kbd>ssg</kbd> | 𝐍 | Vertical split with previous buffer | `:vsplit │ wincmd p │ e#`
+| <kbd>sh</kbd> | 𝐍 | Toggle colorscheme background=dark/light | `:set background` …
+| <kbd>s-</kbd> | 𝐍 | Lower solarized8 colorscheme contrast | `:colorscheme ` …
+| <kbd>s=</kbd> | 𝐍 | Raise solarized8 colorscheme contrast | `:colorscheme ` …
+
+### Git Version Control
+
+| Key   | Mode | Action             | Plugin or Mapping
+| ----- |:----:| ------------------ | ------
+| <kbd>gs</kbd> | 𝐍 | Preview hunk | <small>[airblade/vim-gitgutter]</small>
+| <kbd>gS</kbd> | 𝐍 𝐕 𝐒 | Stage hunk | <small>[airblade/vim-gitgutter]</small>
+| <kbd>Space</kbd>+<kbd>gr</kbd> | 𝐍 | Revert hunk | <small>[airblade/vim-gitgutter]</small>
+| <kbd>Space</kbd>+<kbd>ga</kbd> | 𝐍 | Git add current file | <small>[chemzqm/vim-easygit]</small>
+| <kbd>Space</kbd>+<kbd>gd</kbd> | 𝐍 | Git diff | <small>[chemzqm/vim-easygit]</small>
+| <kbd>Space</kbd>+<kbd>gc</kbd> | 𝐍 | Git commit | <small>[chemzqm/vim-easygit]</small>
+| <kbd>Space</kbd>+<kbd>gb</kbd> | 𝐍 | Git blame | <small>[chemzqm/vim-easygit]</small>
+| <kbd>Space</kbd>+<kbd>gF</kbd> | 𝐍 | Git fetch | <small>[chemzqm/vim-easygit]</small>
+| <kbd>Space</kbd>+<kbd>gp</kbd> | 𝐍 | Git push | <small>[chemzqm/vim-easygit]</small>
 
 ### Plugin: Denite
 
 | Key   | Mode | Action
 | ----- |:----:| ------------------
-| <kbd>;</kbd>+<kbd>r</kbd> | Normal | Resumes last Denite window
-| <kbd>;</kbd>+<kbd>f</kbd> | Normal | File search
-| <kbd>;</kbd>+<kbd>b</kbd> | Normal | Buffers and MRU
-| <kbd>;</kbd>+<kbd>d</kbd> | Normal | Directories
-| <kbd>;</kbd>+<kbd>v</kbd> | Normal/Visual | Yank history
-| <kbd>;</kbd>+<kbd>l</kbd> | Normal | Location list
-| <kbd>;</kbd>+<kbd>q</kbd> | Normal | Quick fix
-| <kbd>;</kbd>+<kbd>n</kbd> | Normal | Dein plugin list
-| <kbd>;</kbd>+<kbd>g</kbd> | Normal | Grep search
-| <kbd>;</kbd>+<kbd>j</kbd> | Normal | Jump points
-| <kbd>;</kbd>+<kbd>u</kbd> | Normal | Junk files
-| <kbd>;</kbd>+<kbd>o</kbd> | Normal | Outline tags
-| <kbd>;</kbd>+<kbd>s</kbd> | Normal | Sessions
-| <kbd>;</kbd>+<kbd>t</kbd> | Normal | Tag list
-| <kbd>;</kbd>+<kbd>p</kbd> | Normal | Jump to previous position
-| <kbd>;</kbd>+<kbd>h</kbd> | Normal | Help
-| <kbd>;</kbd>+<kbd>m</kbd> | Normal | Memo list
-| <kbd>;</kbd>+<kbd>z</kbd> | Normal | Z (jump around)
-| <kbd>;</kbd>+<kbd>/</kbd> | Normal | Buffer lines
-| <kbd>;</kbd>+<kbd>*</kbd> | Normal | Match word under cursor with lines
-| <kbd>;</kbd>+<kbd>;</kbd> | Normal | Command history
-| <kbd>Space</kbd>+<kbd>gl</kbd> | Normal | Git log (all)
-| <kbd>Space</kbd>+<kbd>gs</kbd> | Normal | Git status
-| <kbd>Space</kbd>+<kbd>gc</kbd> | Normal | Git branches
-| <kbd>Space</kbd>+<kbd>gt</kbd> | Normal | Find tags matching word under cursor
-| <kbd>Space</kbd>+<kbd>gf</kbd> | Normal | Find file matching word under cursor
-| <kbd>Space</kbd>+<kbd>gg</kbd> | Normal/Visual | Grep word under cursor
+| <kbd>;r</kbd> | 𝐍 | Resumes last Denite window
+| <kbd>;f</kbd> | 𝐍 | File search
+| <kbd>;g</kbd> | 𝐍 | Grep search
+| <kbd>;b</kbd> | 𝐍 | Buffers and MRU
+| <kbd>;d</kbd> | 𝐍 | Directories and MRU
+| <kbd>;v</kbd> | 𝐍 𝐕 | Yank history
+| <kbd>;l</kbd> | 𝐍 | Location list
+| <kbd>;q</kbd> | 𝐍 | Quick fix
+| <kbd>;n</kbd> | 𝐍 | Dein plugin list
+| <kbd>;j</kbd> | 𝐍 | Jump points and change stack
+| <kbd>;u</kbd> | 𝐍 | Junk files
+| <kbd>;o</kbd> | 𝐍 | Outline tags
+| <kbd>;s</kbd> | 𝐍 | Sessions
+| <kbd>;t</kbd> | 𝐍 | Tag list
+| <kbd>;p</kbd> | 𝐍 | Jumps
+| <kbd>;h</kbd> | 𝐍 | Help
+| <kbd>;m</kbd> | 𝐍 | Memo list
+| <kbd>;z</kbd> | 𝐍 | Z (jump around)
+| <kbd>;;</kbd> | 𝐍 | Command history
+| <kbd>;/</kbd> | 𝐍 | Buffer lines
+| <kbd>;*</kbd> | 𝐍 | Search word under cursor with lines
+| <kbd>Space</kbd>+<kbd>gl</kbd> | 𝐍 | Git log (all)
+| <kbd>Space</kbd>+<kbd>gs</kbd> | 𝐍 | Git status
+| <kbd>Space</kbd>+<kbd>gc</kbd> | 𝐍 | Git branches
+| <kbd>Space</kbd>+<kbd>gt</kbd> | 𝐍 | Find tags matching word under cursor
+| <kbd>Space</kbd>+<kbd>gf</kbd> | 𝐍 | Find files matching word under cursor
+| <kbd>Space</kbd>+<kbd>gg</kbd> | 𝐍 𝐕 | Grep word under cursor
 | **Within _Denite_ window** ||
-| <kbd>jj</kbd> or <kbd>kk</kbd> | Insert | Leave Insert mode
-| <kbd>q</kbd> or <kbd>Escape</kbd> | Normal | Exit denite window
-| <kbd>Space</kbd> | Normal | Select entry
-| <kbd>Tab</kbd> | Normal | List and choose action
-| <kbd>i</kbd> | Normal | Open filter input
-| <kbd>dd</kbd> | Normal | Delete entry
-| <kbd>p</kbd> | Normal | Preview entry
-| <kbd>st</kbd> | Normal | Open in a new tab
-| <kbd>sg</kbd> | Normal | Open in a vertical split
-| <kbd>sv</kbd> | Normal | Open in a split
-| <kbd>r</kbd> | Normal | Redraw
-| <kbd>yy</kbd> | Normal | Yank
-| <kbd>'</kbd> | Normal | Quick move
+| <kbd>jj</kbd> or <kbd>Escape</kbd> | 𝐈 | Leave Insert mode
+| <kbd>i</kbd> or <kbd>/</kbd> | 𝐍 | Enter Insert mode (filter input)
+| <kbd>q</kbd> or <kbd>Escape</kbd> | 𝐍 | Exit denite window
+| <kbd>Tab</kbd> or <kbd>Shift</kbd>+<kbd>Tab</kbd> | 𝐈 | Next/previous candidate
+| <kbd>Space</kbd> | 𝐍 | Select candidate entry
+| <kbd>dd</kbd> | 𝐍 | Delete entry
+| <kbd>p</kbd> | 𝐍 | Preview entry
+| <kbd>st</kbd> | 𝐍 | Open in a new tab
+| <kbd>sg</kbd> | 𝐍 | Open in a vertical split
+| <kbd>sv</kbd> | 𝐍 | Open in a split
+| <kbd>'</kbd> | 𝐍 | Quick-move
+| <kbd>r</kbd> | 𝐍 | Redraw
+| <kbd>yy</kbd> | 𝐍 | Yank
+| <kbd>Tab</kbd> | 𝐍 | List and choose action
 
 ### Plugin: Defx
 
 | Key   | Mode | Action
 | ----- |:----:| ------------------
-| <kbd>;</kbd>+<kbd>e</kbd> | Normal | Open file explorer (toggle)
-| <kbd>;</kbd>+<kbd>a</kbd> | Normal | Open file explorer and select current file
+| <kbd>;e</kbd> | 𝐍 | Open file-explorer (toggle)
+| <kbd>;a</kbd> | 𝐍 | Focus current file in file-explorer
 | **Within _Defx_ window** ||
-| <kbd>h</kbd> | Normal | Collapse directory tree
-| <kbd>j</kbd> or <kbd>k</kbd> | Normal | Move up and down the tree
-| <kbd>Return</kbd> or <kbd>l</kbd> | Normal | Toggle collapse/expand directory or open file
-| <kbd>Space</kbd> | Normal | Select current file or directory
-| <kbd>*</kbd> | Normal | Invert selection (select all)
-| <kbd>Backspace</kbd> | Normal | Move into the parent directory
-| <kbd>&</kbd> or <kbd>\</kbd> | Normal | Move to project root
-| <kbd>~</kbd> | Normal | Move to user home directory
-| <kbd>st</kbd> | Normal | Open file in new tab
-| <kbd>sv</kbd> | Normal | Open file in a horizontal split
-| <kbd>sg</kbd> | Normal | Open file in a vertical split
-| <kbd>N</kbd> | Normal | Create new directories and/or files
-| <kbd>K</kbd> | Normal | Create new directory
-| <kbd>c</kbd> / <kbd>m</kbd> / <kbd>p</kbd> | Normal | Copy, move, and paste
-| <kbd>r</kbd> | Normal | Rename file or directory
-| <kbd>dd</kbd> | Normal | Delete selected files and directories
-| <kbd>y</kbd> | Normal | Yank selected item to clipboard
-| <kbd>w</kbd> | Normal | Toggle window size
-| <kbd>]</kbd>+<kbd>g</kbd> | Normal | Next dirty git item
-| <kbd>[</kbd>+<kbd>g</kbd> | Normal | Previous dirty git item
-| <kbd>x</kbd> / <kbd>gx</kbd> | Normal | Execute associated system application
-| <kbd>gd</kbd> | Normal | Open git diff on selected file
-| <kbd>gl</kbd> | Normal | Open terminal file explorer
-| <kbd>gr</kbd> | Normal | Grep in selected directory
-| <kbd>gf</kbd> | Normal | Find files in selected directory
+| <kbd>j</kbd> or <kbd>k</kbd> | 𝐍 | Move up and down the tree
+| <kbd>l</kbd> or <kbd>Return</kbd> | 𝐍 | Toggle collapse/expand directory or open file
+| <kbd>h</kbd> | 𝐍 | Collapse directory tree
+| <kbd>t</kbd> | 𝐍 | Expand directory tree recursively
+| <kbd>.</kbd> | 𝐍 | Toggle hidden files
+| <kbd>Space</kbd> | 𝐍 | Select entry
+| <kbd>*</kbd> | 𝐍 | Invert selection (select all)
+| <kbd>&</kbd> or <kbd>\</kbd> | 𝐍 | Change into current working directory
+| <kbd>~</kbd> | 𝐍 | Change to user home directory
+| <kbd>u</kbd> or <kbd>Backspace</kbd> | 𝐍 | Change into parent directory
+| <kbd>u</kbd> <kbd>2</kbd>/<kbd>3</kbd>/<kbd>4</kbd> | 𝐍 | Change into parent directory count
+| <kbd>st</kbd> | 𝐍 | Open file in new tab
+| <kbd>sv</kbd> | 𝐍 | Open file in a horizontal split
+| <kbd>sg</kbd> | 𝐍 | Open file in a vertical split
+| <kbd>N</kbd> | 𝐍 | Create new directories and/or files
+| <kbd>K</kbd> | 𝐍 | Create new directory
+| <kbd>c</kbd> / <kbd>m</kbd> / <kbd>p</kbd> | 𝐍 | Copy, move, and paste
+| <kbd>r</kbd> | 𝐍 | Rename file or directory
+| <kbd>dd</kbd> | 𝐍 | Trash selected files and directories
+| <kbd>y</kbd> | 𝐍 | Yank path to clipboard
+| <kbd>w</kbd> | 𝐍 | Toggle window size
+| <kbd>]g</kbd> | 𝐍 | Next dirty git item
+| <kbd>[g</kbd> | 𝐍 | Previous dirty git item
+| <kbd>x</kbd> or <kbd>gx</kbd> | 𝐍 | Execute associated system application
+| <kbd>gd</kbd> | 𝐍 | Open git diff on selected file
+| <kbd>gl</kbd> | 𝐍 | Open terminal file explorer with tmux
+| <kbd>gr</kbd> | 𝐍 | Grep in current position
+| <kbd>gf</kbd> | 𝐍 | Find files in current position
 
 ### Plugin: Asyncomplete and Emmet
 
 | Key   | Mode | Action
 | ----- |:----:| ------------------
-| <kbd>Tab</kbd> / <kbd>Shift-Tab</kbd> | Insert | Navigate completion-menu
-| <kbd>Enter</kbd> | Insert | Select completion or expand snippet
-| <kbd>Ctrl</kbd>+<kbd>j</kbd> <kbd>k</kbd> <kbd>d</kbd> <kbd>u</kbd> | Insert | Movement in completion pop-up
-| <kbd>Ctrl</kbd>+<kbd>Return</kbd> | Insert | Expand Emmet sequence
-| <kbd>Ctrl</kbd>+<kbd>Space</kbd> | Insert | Refresh and show candidates
-| <kbd>Ctrl</kbd>+<kbd>y</kbd> | Insert | Close pop-up
-| <kbd>Ctrl</kbd>+<kbd>e</kbd> | Insert | Cancel selection and close pop-up
-| <kbd>Ctrl</kbd>+<kbd>l</kbd> | Insert | Expand snippet at cursor
-| <kbd>Ctrl</kbd>+<kbd>f</kbd> | Insert/select | Jump to next snippet placeholder
-| <kbd>Ctrl</kbd>+<kbd>b</kbd> | Insert/select | Jump to previous snippet placeholder
-
-### Plugin: Caw (comments)
-
-| Key   | Mode | Action
-| ----- |:----:| ------------------
-| <kbd>gc</kbd> | Normal/visual | Prefix
-| <kbd>gcc</kbd> | Normal/visual | Toggle comments
-| <kbd>Space</kbd>+<kbd>v</kbd> | Normal/visual | Toggle single-line comments
-| <kbd>Space</kbd>+<kbd>V</kbd> | Normal/visual | Toggle comment block
-
-### Plugin: Edge Motion
-
-| Key   | Mode | Action
-| ----- |:----:| ------------------
-| <kbd>g</kbd>+<kbd>j</kbd> | Normal/Visual | Jump to edge downwards
-| <kbd>g</kbd>+<kbd>k</kbd> | Normal/Visual | Jump to edge upwards
+| <kbd>Tab</kbd> / <kbd>Shift-Tab</kbd> | 𝐈 | Navigate completion-menu
+| <kbd>Enter</kbd> | 𝐈 | Select completion or expand snippet
+| <kbd>Ctrl</kbd>+<kbd>j</kbd>/<kbd>k</kbd>/<kbd>d</kbd>/<kbd>u</kbd> | 𝐈 | Movement in completion pop-up
+| <kbd>Ctrl</kbd>+<kbd>Return</kbd> | 𝐈 | Expand Emmet sequence
+| <kbd>Ctrl</kbd>+<kbd>Space</kbd> | 𝐈 | Refresh and show candidates
+| <kbd>Ctrl</kbd>+<kbd>y</kbd> | 𝐈 | Close pop-up
+| <kbd>Ctrl</kbd>+<kbd>e</kbd> | 𝐈 | Cancel selection and close pop-up
+| <kbd>Ctrl</kbd>+<kbd>l</kbd> | 𝐈 | Expand snippet at cursor
+| <kbd>Ctrl</kbd>+<kbd>f</kbd> | 𝐈 𝐒 | Jump to next snippet placeholder
+| <kbd>Ctrl</kbd>+<kbd>b</kbd> | 𝐈 𝐒 | Jump to previous snippet placeholder
 
 ### Plugin: Signature
 
 | Key   | Mode | Action
 | ----- |:----:| ------------------
-| <kbd>m</kbd> + <kbd>/</kbd> or <kbd>?</kbd> | Normal | Show list of buffer marks/markers
-| <kbd>m</kbd> + <kbd>m</kbd> | Normal | Toggle mark on current line
-| <kbd>m</kbd> + <kbd>,</kbd> | Normal | Place next mark
-| <kbd>m</kbd> + <kbd>a-z</kbd> | Normal | Place specific mark (Won't work for: <kbd>m</kbd>, <kbd>n</kbd>, <kbd>p</kbd>)
-| <kbd>d</kbd> + <kbd>m</kbd> + <kbd>a-z</kbd> | Normal | Remove specific mark (Won't work for: <kbd>m</kbd>, <kbd>n</kbd>, <kbd>p</kbd>)
-| <kbd>m</kbd> + <kbd>n</kbd> | Normal | Jump to next mark
-| <kbd>m</kbd> + <kbd>p</kbd> | Normal | Jump to previous mark
-| <kbd>]</kbd> + <kbd>=</kbd> | Normal | Jump to next marker
-| <kbd>[</kbd> + <kbd>=</kbd> | Normal | Jump to previous marker
-| <kbd>m</kbd> + <kbd>-</kbd> | Normal | Purge all on current line
-| <kbd>m</kbd> + <kbd>Space</kbd> | Normal | Purge marks
-| <kbd>m</kbd> + <kbd>Backspace</kbd> | Normal | Purge markers
-
-### Plugin: Easygit
-
-| Key   | Mode | Action
-| ----- |:----:| ------------------
-| <kbd>Space</kbd>+<kbd>ga</kbd> | Normal | Git add current file
-| <kbd>Space</kbd>+<kbd>gS</kbd> | Normal | Git status
-| <kbd>Space</kbd>+<kbd>gd</kbd> | Normal | Git diff
-| <kbd>Space</kbd>+<kbd>gD</kbd> | Normal | Close diff
-| <kbd>Space</kbd>+<kbd>gc</kbd> | Normal | Git commit
-| <kbd>Space</kbd>+<kbd>gb</kbd> | Normal | Git blame
-| <kbd>Space</kbd>+<kbd>gB</kbd> | Normal | Open in browser
-| <kbd>Space</kbd>+<kbd>gp</kbd> | Normal | Git push
-
-### Plugin: GitGutter
-
-| Key   | Mode | Action
-| ----- |:----:| ------------------
-| <kbd>[</kbd>+<kbd>g</kbd> | Normal | Jump to next hunk
-| <kbd>]</kbd>+<kbd>g</kbd> | Normal | Jump to previous hunk
-| <kbd>g</kbd>+<kbd>S</kbd> | Normal | Stage hunk
-| <kbd>Space</kbd>+<kbd>gr</kbd> | Normal | Revert hunk
-| <kbd>g</kbd>+<kbd>s</kbd> | Normal | Preview hunk
-
-### Plugin: Linediff
-
-| Key   | Mode | Action
-| ----- |:----:| ------------------
-| <kbd>Space</kbd>+<kbd>mda</kbd> | Visual | Sequentially mark region for diff
-| <kbd>Space</kbd>+<kbd>mdf</kbd> | Visual | Mark region for diff and compare if more than one
-| <kbd>Space</kbd>+<kbd>mds</kbd> | Normal | Shows the comparison for all marked regions
-| <kbd>Space</kbd>+<kbd>mdr</kbd> | Normal | Removes the signs denoting the diff regions
-
-### Misc Plugins
-
-| Key   | Mode | Action
-| ----- |:----:| ------------------
-| <kbd>v</kbd> / <kbd>V</kbd> | Visual/select | Expand/reduce selection (expand-region)
-| <kbd>-</kbd> | Normal | Choose a window to edit (choosewin)
-| <kbd>Space</kbd>+<kbd>mg</kbd> | Normal | Open Magit
-| <kbd>Space</kbd>+<kbd>mt</kbd> | Normal/Visual | Toggle highlighted word (quickhl)
-| <kbd>Space</kbd>+<kbd>-</kbd> | Normal | Switch editing window with selected (choosewin)
-| <kbd>Space</kbd>+<kbd>o</kbd> | Normal/Visual | Open SCM detailed URL in browser (`:OpenSCM`)
-| <kbd>Space</kbd>+<kbd>t</kbd> | Normal | Open structure window (`:Vista`)
-| <kbd>Space</kbd>+<kbd>a</kbd> | Normal | Show nearby tag in structure window (`:Vista show`)
-| <kbd>Space</kbd>+<kbd>G</kbd> | Normal | Toggle distraction-free writing (goyo)
-| <kbd>Space</kbd>+<kbd>gu</kbd> | Normal | Open undo-tree
-| <kbd>Space</kbd>+<kbd>W</kbd> | Normal | VimWiki
-| <kbd>Space</kbd>+<kbd>K</kbd> | Normal | Thesaurus
+| <kbd>m/</kbd> or <kbd>m?</kbd> | 𝐍 | Show list of buffer marks/markers
+| <kbd>mm</kbd> | 𝐍 | Toggle mark on current line
+| <kbd>m,</kbd> | 𝐍 | Place next mark
+| <kbd>m</kbd> <kbd>a-z</kbd> | 𝐍 | Place specific mark (Won't work for: <kbd>mm</kbd>, <kbd>mn</kbd>, <kbd>mp</kbd>)
+| <kbd>dm</kbd> <kbd>a-z</kbd> | 𝐍 | Remove specific mark (Won't work for: <kbd>mm</kbd>, <kbd>mn</kbd>, <kbd>mp</kbd>)
+| <kbd>mn</kbd> | 𝐍 | Jump to next mark
+| <kbd>mp</kbd> | 𝐍 | Jump to previous mark
+| <kbd>]=</kbd> | 𝐍 | Jump to next marker
+| <kbd>[=</kbd> | 𝐍 | Jump to previous marker
+| <kbd>m-</kbd> | 𝐍 | Purge all on current line
+| <kbd>m</kbd> <kbd>Space</kbd> | 𝐍 | Purge marks
+| <kbd>m</kbd> <kbd>Backspace</kbd> | 𝐍 | Purge markers
 
 </details>
 
 ## Credits & Contribution
 
-Big thanks to the dark knight [Shougo].
+Big thanks to the dark knight [Shougo](https://github.com/Shougo).
 
+[config/mappings.vim]: ./config/mappings.vim
+[plugin/whitespace.vim]: ./plugin/whitespace.vim
+[plugin/sessions.vim]: ./plugin/sessions.vim
+[plugin/browser.vim]: ./plugin/browser.vim
+[plugin/devhelp.vim]: ./plugin/devhelp.vim
+[plugin/actionmenu.vim]: ./plugin/actionmenu.vim
+[Marked 2]: https://marked2app.com
 [Neovim]: https://github.com/neovim/neovim
 [Vim8]: https://github.com/vim/vim
-[Shougo]: https://github.com/Shougo
 [lazy-loaded]: ./config/plugins.yaml#L47
-[yaml2json]: https://github.com/bronze1man/yaml2json
