@@ -7,8 +7,8 @@
   rev: release
   hook_source: source $VIM_PATH/config/plugins/coc.vim
 
-- repo: ybian/smartim
-  hook_add: let g:smartim_default = 'com.apple.keylayout.ABC'
+# - repo: ybian/smartim
+#   hook_add: let g:smartim_default = 'com.apple.keylayout.ABC'
 
 - repo: terryma/vim-multiple-cursors
 

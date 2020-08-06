@@ -8,12 +8,19 @@
     "html.suggest.html5": true,
     "python.linting.enabled": true,
     "tsserver.log": "verbose",
-    "python.jediEnabled": true,
     "python.autoUpdateLanguageServer": true,
     "go.goplsOptions":{
             "completeUnimported": true
-
     },
+   "diagnostic.errorSign": "✖",
+   "diagnostic.warningSign": "⚠",
+   "diagnostic.infoSign": "ℹ",
+   "diagnostic.hintSign": "➤",
+   "diagnostic.checkCurrentLine": true,
+
+
+
+
     "languageserver": {
         "intelephense": {
             "command": "intelephense",
@@ -22,7 +29,12 @@
             "initializationOptions": {
                 "storagePath": "/tmp/intelephense"
             }
-        }
+        },
+        "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod"],
+      "disableWorkspaceFolders": true,
+      "filetypes": ["go"]
     }
+  }
 }
-

@@ -6,6 +6,7 @@ let b:defx_git_loaded = 1
 
 " Use <Tab> for trigger completion and navigate to the next complete item
 let g:coc_snippet_next = '<tab>'
+
 inoremap <silent><expr> <Tab>
 	\ pumvisible() ? "\<C-n>" :
 	\ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
